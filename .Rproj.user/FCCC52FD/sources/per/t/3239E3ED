@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1541792839198.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "927054119",
+    "id" : "3239E3ED",
+    "lastKnownWriteTime" : 1541910844,
+    "last_content_update" : 1541910844533,
+    "path" : "C:/Users/Nick/Desktop/DCF_SHINY_APP/app.R",
+    "project_path" : "app.R",
+    "properties" : {
+        "cursorPosition" : "29,49",
+        "scrollLine" : "13"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

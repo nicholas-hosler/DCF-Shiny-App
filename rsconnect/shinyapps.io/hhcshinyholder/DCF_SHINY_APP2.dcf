@@ -1,0 +1,13 @@
+name: DCF_SHINY_APP2
+title: DCF_SHINY_APP2
+username:
+account: hhcshinyholder
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 564092
+bundleId: 1694026
+url: https://hhcshinyholder.shinyapps.io/DCF_SHINY_APP2/
+when: 1541910941.97169
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|code.r

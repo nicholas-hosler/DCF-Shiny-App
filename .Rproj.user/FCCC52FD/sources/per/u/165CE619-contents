@@ -1,0 +1,29 @@
+# list packages in an R file 
+filename <- "C:/Users/Nick/Desktop/DCF_SHINY_APP/code.r"
+tmp <- getParseData(parse(filename, keep.source=TRUE))
+crit <- quote(token == "SYMBOL_FUNCTION_CALL")
+tmp <- dplyr::filter(tmp, .dots = crit)
+tmp <- unique(sort(tmp$text))
+src <- paste(as.vector(sapply(tmp, find)))
+outlist <- tapply(tmp,factor(src),c)
+outlist
+
+
+
+
+
+
+
+
+library(sos)
+toInstall <- outlist$`character(0)`
+for(i in 1:length(toInstall)){
+  newPackage<-findFn(toInstall[i])[1,4]
+  if (!require(newPackage,character.only = TRUE)) {
+    install.packages(newPackage)
+    library(newPackage,character.only = TRUE)
+  }
+  print(newPackage)
+}
+
+outlist$`c(".GlobalEnv", "package:dplyr", "package:plyr")`
