@@ -1,4 +1,23 @@
 
+######################################################################################################################################
+
+######################################################################################################################################
+# Title: DCF Valuation using R 
+# Author: Nick Hosler
+#
+# Purpose: Destroy all bankers
+#
+# Credits: R Blogger - systematicinvestor and his packages - great resource!
+# Link : https://www.r-bloggers.com/company-valuation-using-discounted-cash-flows/
+#
+# Details: 
+# The point of this is to make a script that can spit out a DCF valuation of a given stock for given parameter changes
+# with the intent to eventually enable it for shiny, thereby making it universally accessible, and ruining the need 
+# for traditional analysts - cause HA! 
+#
+########################################################################################################################################
+
+
 #simople app to show intrinsic value based on percepetion 
 
 library(shiny)
@@ -41,38 +60,10 @@ ui <- fluidPage(
 
 server <- function(input, output){
   
-  
-  
-  
-  
-  
- # v <- reactiveValues(doPlot = FALSE)
+
   
 observeEvent(input$do, {
-    # 0 will be coerced to FALSE
-    # 1+ will be coerced to TRUE
-  #  v$doPlot <- input$do
-    
-
-    ########################### code drop
-    
-    
-    ######################################################################################################################################
-    
-    ######################################################################################################################################
-    # Title: DCF Valuation using R 
-    # Author: Nick Hosler
-    #
-    # Purpose: Destroy all bankers
-    #
-    #
-    # Details: 
-    # The point of this is to make a script that can spit out a DCF valuation of a given stock for given parameter changes
-    # with the intent to eventually enable it for shiny, thereby making it universally accessible, and ruining the need 
-    # for traditional analysts - cause HA! 
-    #
-    ########################################################################################################################################
-    
+  
     
     # Libs 
     
@@ -205,14 +196,12 @@ observeEvent(input$do, {
     
     #######################################################################################################################################  
     
-#  })
+
   
 
   
   output$intrinsics <- renderPlot({
-  #  if (v$doPlot == FALSE) return()
-    
-  #  isolate({ 
+
  
       plota(price, type='l', log = 'y', col='blue', main=tickers[1],
             ylim=range(price,dcf.price,na.rm=T))
@@ -223,28 +212,23 @@ observeEvent(input$do, {
       
       
   
-    #  })
+   
   })
   
   
   output$fcf <- renderPlot({
-   # if (v$doPlot == FALSE) return()
-    
-    #isolate({ 
+  
       
 
       plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
       
-#      
-#   })
+
   })
   
   
   
   output$growth <- renderPlot({
-  #  if (v$doPlot == FALSE) return()
-    
-   # isolate({ 
+
       
       
       plota(g, type='b', col='blue', pch=0, main='Growth Rate')
@@ -254,16 +238,6 @@ observeEvent(input$do, {
   })
   
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
