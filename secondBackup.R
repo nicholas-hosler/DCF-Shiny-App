@@ -43,15 +43,47 @@ rsconnect::setAccountInfo(name='hhcshinyholder',
 # will need assumptions for growth periods and such 
 ui <- fluidPage(
   
-  # Copy the line below to make a text input box
-  textInput( inputId = "ticker", label = h3("Ticker Symbol"), value = "AMZN"),
   
-  actionButton("do", label = "CLICK ME TO COMPUTE"),
-  
-  plotOutput("intrinsics") %>% withSpinner(color="#aabacb"),
-  plotOutput("fcf") %>% withSpinner(color="#aabacb"),
-  plotOutput("growth") %>% withSpinner(color="#aabacb"),
-  tableOutput('table')
+  sidebarLayout(
+    sidebarPanel(
+      titlePanel(title = "DCF Valuation App"),
+      # Copy the line below to make a text input box
+      textInput( inputId = "ticker", label = h3("Enter Valid Ticker Symbol"), value = "AMZN"),
+      selectInput(inputId = "growth", label =  h3("Long Run Growth Forcast"), selected = 3,
+                  choices = list("1%" = 1,
+                                 "2%" = 2,
+                                 "3%" = 3,
+                                 "4%" = 4,
+                                 "5%" = 5)),
+      
+      selectInput(inputId = "discount", label =  h3("Estimated Discount Rate"), selected = 9,
+                  choices = list("7%" =  7,
+                                 "8%" =  8,
+                                 "9%" =  9,
+                                 "10%" = 10,
+                                 "11%" = 11,
+                                 "12%" = 12)),
+      
+      p("This app is designed to compute and map the historical DCF valuation for various companies by scraping data off the web from Yahoo Finance"), 
+      p("Please note: DCF valuations do not work for firms without positive cash flows"),
+      p("Please also note: I built this for fun, and it will CRASH if you don't use a valid ticker, and you will need to reload the page"),
+      p("To use it, please enter the ticker you desire and click the COMPUTE button"),
+      
+      
+      actionButton("do", label = "COMPUTE")),
+    
+    
+    mainPanel(
+      
+      
+      plotOutput("intrinsics") %>% withSpinner(color="#aabacb"),
+      plotOutput("fcf") %>% withSpinner(color="#aabacb"),
+      plotOutput("growth") %>% withSpinner(color="#aabacb"),
+      tableOutput('table')
+      
+      
+    )
+  )
   
 )
 
@@ -60,16 +92,16 @@ ui <- fluidPage(
 
 server <- function(input, output){
   
-
   
-observeEvent(input$do, {
   
+  observeEvent(input$do, {
+    
     
     # Libs 
     
-
+    
     tryCatch(library(quantmod),error=function(cond){install.packages('quantmod');library(quantmod)}) 
-
+    
     
     ###############################################################################
     # Load Systematic Investor Toolbox (SIT)
@@ -77,19 +109,21 @@ observeEvent(input$do, {
     ###############################################################################
     
     con = gzcon(url('http://www.systematicportfolio.com/sit.gz', 'rb'))
-     #source("code.r")
+    #source("code.r")
     source(con)
-     close(con)
+    close(con)
     
     #*****************************************************************
     # Load historical fundamental and pricing data
     #****************************************************************** 
     tickers = spl(paste(input$ticker)) 
     tickers.temp = spl(paste0('NASDAQ:',input$ticker))
-   
+    
     
     
     # get fundamental data
+    
+    
     data.fund <- new.env()
     for(i in 1:len(tickers))
       data.fund[[tickers[i]]] = fund.data(tickers.temp[i], 80, 'annual')
@@ -103,6 +137,7 @@ observeEvent(input$do, {
     fund = data.fund[[tickers[1]]]
     fund.date = date.fund.data(fund)            
     price = Cl(data[[tickers[1]]]['1995::'])
+    
     
     
     # Step 2 
@@ -158,6 +193,10 @@ observeEvent(input$do, {
     #******************************************************************   
     
     
+    # Input checking
+    # cat(as.integer(input$discount)," input discount")
+    # 
+    # cat(input$discount, "discout")
     # this is where I would ant to tweek the inputs to generate a decf from any set of assumptions 
     # if I put this on the web it would blow minds 
     dcf.price = NA * g
@@ -165,10 +204,10 @@ observeEvent(input$do, {
     
     for(i in i.start : nrow(g)) {
       # Create Growth Rate scenario:      
-      g.scenario = c(rep(g[i],3), rep(g[i],4)*0.8, rep(g[i],3)*0.8*0.8, rep(3/100,10))
+      g.scenario = c(rep(g[i],3), rep(g[i],4)*0.8, rep(g[i],3)*0.8*0.8, rep(as.integer(input$growth)/100,10))
       
       # Compute Intrinsic Value
-      dcf.price[i] = compute.DCF.IV(cash[i], CEQ[i], CSHO[i], g.scenario, 9/100)
+      dcf.price[i] = compute.DCF.IV(cash[i], CEQ[i], CSHO[i], g.scenario, as.integer(input$discount)/100)
     }
     
     #*****************************************************************
@@ -186,7 +225,7 @@ observeEvent(input$do, {
     # 
     # 
     # plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
-
+    
     
     # COmpute this is a logic checker for whether you've pressed action button yet 
     
@@ -196,13 +235,13 @@ observeEvent(input$do, {
     
     #######################################################################################################################################  
     
-
-  
-
-  
-  output$intrinsics <- renderPlot({
-
- 
+    
+    
+    
+    
+    output$intrinsics <- renderPlot({
+      
+      
       plota(price, type='l', log = 'y', col='blue', main=tickers[1],
             ylim=range(price,dcf.price,na.rm=T))
       
@@ -211,31 +250,35 @@ observeEvent(input$do, {
       plota.legend('Close,Intrinsic Value', 'blue,red', list(price, dcf.price))   
       
       
-  
-   
-  })
-  
-  
-  output$fcf <- renderPlot({
-  
+    })
+    
+    
+    
+    output$fcf <- renderPlot({
       
-
+      
+      
       plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
       
-
-  })
-  
-  
-  
-  output$growth <- renderPlot({
-
+      
+    })
+    
+    
+    
+    output$growth <- renderPlot({
+      
       
       
       plota(g, type='b', col='blue', pch=0, main='Growth Rate')
       
       
     })
+    
+    
+    
+    
   })
+  
   
 }
 

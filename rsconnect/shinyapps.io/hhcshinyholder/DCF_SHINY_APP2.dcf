@@ -5,9 +5,9 @@ account: hhcshinyholder
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 564092
-bundleId: 1694026
+bundleId: 1883236
 url: https://hhcshinyholder.shinyapps.io/DCF_SHINY_APP2/
-when: 1541910941.97169
+when: 1550529368.93352
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .RData|code.r
+ignoredFiles: .gitattributes|.RData|backup.R|debugger.R|secondBackup.R|thirdBack.R
