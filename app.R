@@ -32,10 +32,12 @@ library(praise)
 library(testthat)
 
 # setwd()
-rsconnect::setAccountInfo(name='hhcshinyholder', 
-                          token='BC006FD9992BC61B0AD181CFC6C35030', 
-                          secret='JTYJWYyZWxYdti9sdv/+M23sEEcR2KnYrv4acyI1')
 
+
+source("secret.R")
+
+#this should connect to shiny, will add secret.R to .gitignore
+connectToShiny()
 
 
 
