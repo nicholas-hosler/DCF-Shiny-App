@@ -1,4 +1,4 @@
-# DCF_SHINY_APP
+# DCF SHINY APP
 Compute Intrinsic Value
 
 The actual app is in app.R, very simple and intuitive, very useful in a pinch and fun to build. 
