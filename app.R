@@ -39,14 +39,9 @@ source("secret.R")
 #this should connect to shiny, will add secret.R to .gitignore
 connectToShiny()
 
-
-
-
 # this is where you create references to your inputs 
 # will need assumptions for growth periods and such 
 ui <- fluidPage(
-  
-  
   sidebarLayout(
     sidebarPanel(
       titlePanel(title = "DCF Valuation App"),
@@ -75,7 +70,7 @@ ui <- fluidPage(
       
       actionButton("load", label = "LOAD DATA"),
       actionButton("do", label = "COMPUTE"), 
-    
+      
     tags$head(tags$style(type="text/css", "
              #loadmessage {
                          position: fixed;
@@ -110,79 +105,14 @@ ui <- fluidPage(
   
 )
 
-
-
-
 server <- function(input, output, session){
-  
-  ##### Data pull as a function #####
-  
-  # dataPull <- function(ticker) {
-  #   
-  #   
-  #   
-  #   con = gzcon(url('http://www.systematicportfolio.com/sit.gz', 'rb'))
-  #   #source("code.r")
-  #   source(con)
-  #   close(con)
-  #   
-  #   #*****************************************************************
-  #   # Load historical fundamental and pricing data
-  #   #****************************************************************** 
-  #   
-  #   
-  #   tickers = spl(paste(toupper(ticker))) 
-  #   tickers.temp = spl(paste0('NASDAQ:',toupper(ticker)))
-  #   
-  #   print("loading 1")
-  #   
-  #   # get fundamental data
-  #   
-  #   
-  #   data.fund <- new.env()
-  #   for(i in 1:len(tickers)) {
-  #     data.fund[[tickers[i]]] = fund.data(tickers.temp[i], 80, 'annual')
-  #     
-  #     print("Loading Part ", i)
-  #   }
-  #   
-  #   print("loading 2")
-  #   # get pricing data
-  #   data <- new.env()
-  #   getSymbols(tickers, src = 'yahoo', from = '1970-01-01', env = data, auto.assign = T)
-  #   for(i in ls(data)) data[[i]] = adjustOHLC(data[[i]], use.Adjusted=T)            
-  #   print("loading 3")
-  #   # prepare data
-  #   fund = data.fund[[tickers[1]]]
-  #   fund.date = date.fund.data(fund)            
-  #   price = Cl(data[[tickers[1]]]['1995::']) 
-  # 
-  # 
-  #   list <- list(fund,fund.date,price)
-  #   list2env(list, .GlobalEnv)
-  # 
-  # 
-  # }
-  
-  
-                    
-  ######### top #########
-  
+
   observeEvent(input$load, {
     
     
     
     # Libs 
-    
-    
-    
     tryCatch(library(quantmod),error=function(cond){install.packages('quantmod');library(quantmod)}) 
-    
-   # toggle <- tryCatch({dataPull(input$ticker)},error=function(e){return()}, finally = ) 
-   
-   
-  
-  
     
     ###############################################################################
     # Load Systematic Investor Toolbox (SIT)
@@ -197,11 +127,7 @@ server <- function(input, output, session){
     #*****************************************************************
     # Load historical fundamental and pricing data
     #****************************************************************** 
-    
-  
-    
-  #  tryCatch(list <- dataPull(input$ticker) ,error=function(e){return()})
-      
+   
     tryCatch({
       
     ticker = toupper(input$ticker)
@@ -234,23 +160,11 @@ server <- function(input, output, session){
     fund = data.fund[[tickers[1]]]
     fund.date = date.fund.data(fund)            
     price = Cl(data[[tickers[1]]]['1995::']) 
-    
-    #####    return(list(fund,fund.date,price))
-    # prepare data
-    
-  
- 
-  
-  ######### bottom #######
-  
-    
+       
     tryCatch({
   
   
   observeEvent(input$do, {
-    
-   
-    
     
     # Step 2 
     
@@ -350,19 +264,10 @@ server <- function(input, output, session){
     # 
     # 
     # plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
-    
-    
+    #
     # COmpute this is a logic checker for whether you've pressed action button yet 
-    
-    
-    
-    
-    
+   
     #######################################################################################################################################  
-    
-    
-    
-    
     
     output$intrinsics <- renderPlot({
       
@@ -370,37 +275,23 @@ server <- function(input, output, session){
       plota(price, type='l', log = 'y', col='blue', main=tickers[1],
             ylim=range(price,dcf.price,na.rm=T))
       
-      
       tryCatch({ 
-      
+     
       plota.lines(na.omit(dcf.price), type='s', col='red', lwd=2)
-      
       
     },error=function(e){return()} ) 
       
-      
-      
       plota.legend('Close,Intrinsic Value', 'blue,red', list(price, dcf.price))   
       
-      
     })
-    
-    
     
     output$fcf <- renderPlot({
-      
-      
-      
+     
       plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
-      
-      
+     
     })
     
-    
-    
     output$growth <- renderPlot({
-      
-      
       
       plota(g, type='b', col='blue', pch=0, main='Growth Rate')
       
@@ -416,9 +307,6 @@ server <- function(input, output, session){
       session$reload()
     }
       
-     
-    
-    
   }) },error=function(e){
     
     showModal(modalDialog(
@@ -435,15 +323,9 @@ server <- function(input, output, session){
     
     return()} ) 
     
-    
-    
   })
   
-  
 }
-
-
-
 
 shinyApp(ui, server)
 
