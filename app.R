@@ -11,9 +11,9 @@
 # Link : https://www.r-bloggers.com/company-valuation-using-discounted-cash-flows/
 #
 # Details: 
-# The point of this is to make a script that can spit out a DCF valuation of a given stock for given parameter changes
-# with the intent to eventually enable it for shiny, thereby making it universally accessible, and ruining the need 
-# for traditional analysts - cause HA! 
+# The purpose of this app is to chart the historical valuation of an equity security for any given stock using a standard DCF approach
+# for given set of growth and time parameters.
+# The intent was to to endable it for shiny, thereby making it universally accessible. 
 #
 ########################################################################################################################################
 
