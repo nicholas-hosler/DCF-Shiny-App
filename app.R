@@ -5,7 +5,7 @@
 # Title: DCF Valuation using R 
 # Author: Nick Hosler
 #
-# Purpose: Destroy all bankers
+# Purpose: Make more Accessible the ability to compute and chart historical DCF valaions. 
 #
 # Credits: R Blogger - systematicinvestor and his packages - great resource!
 # Link : https://www.r-bloggers.com/company-valuation-using-discounted-cash-flows/
