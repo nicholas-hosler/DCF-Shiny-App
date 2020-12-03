@@ -17,8 +17,6 @@
 #
 ########################################################################################################################################
 
-
-
 #simople app to show intrinsic value based on percepetion 
 
 library(shiny)
@@ -32,7 +30,6 @@ library(praise)
 library(testthat)
 
 # setwd()
-
 
 source("secret.R")
 
@@ -88,9 +85,6 @@ ui <- fluidPage(
                          ")),
     conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                      tags$div("Loading Data, Please Wait...",id="loadmessage"))),
-
-    
-    
     mainPanel(
       
       
@@ -99,18 +93,13 @@ ui <- fluidPage(
       plotOutput("growth") #%>% withSpinner(color="#aabacb")
      # tableOutput('table') %>% withSpinner(color="#aabacb")
       
-      
     )
   )
-  
 )
 
 server <- function(input, output, session){
 
   observeEvent(input$load, {
-    
-    
-    
     # Libs 
     tryCatch(library(quantmod),error=function(cond){install.packages('quantmod');library(quantmod)}) 
     
@@ -155,14 +144,12 @@ server <- function(input, output, session){
     for(i in ls(data)) data[[i]] = adjustOHLC(data[[i]], use.Adjusted=T)
     print("loading 3")
     
-    
     # prepare data
     fund = data.fund[[tickers[1]]]
     fund.date = date.fund.data(fund)            
     price = Cl(data[[tickers[1]]]['1995::']) 
        
     tryCatch({
-  
   
   observeEvent(input$do, {
     
@@ -195,14 +182,12 @@ server <- function(input, output, session){
       cash = runMean(FCF, 5)
     },error=function(e){return()})
     
-    
     if (is.null(check) == FALSE ) {
       
       print("entered")
       g = runMean(CROIC, 5)
       cash = runMean(FCF, 5)
    
-    
     # Step 3 
     #*****************************************************************
     # Helper function to compute Intrinsic Value
@@ -228,13 +213,8 @@ server <- function(input, output, session){
     # http://www.oldschoolvalue.com/blog/stock-analysis/apple-aapl-valuation/
     #******************************************************************   
     
-    
     # Input checking
-    # cat(as.integer(input$discount)," input discount")
-    # 
-    # cat(input$discount, "discout")
-    # this is where I would ant to tweek the inputs to generate a decf from any set of assumptions 
-    # if I put this on the web it would blow minds 
+    # this is where I would want to tweek the inputs to generate a decf from any set of assumptions 
     dcf.price = NA * g
     i.start = which(!is.na(g))[1] 
     
@@ -245,9 +225,7 @@ server <- function(input, output, session){
       # Compute Intrinsic Value
       dcf.price[i] = compute.DCF.IV(cash[i], CEQ[i], CSHO[i], g.scenario, as.integer(input$discount)/100)
     } 
-    
-    
-    
+   
     #*****************************************************************
     # Create Plots
     #****************************************************************** 
@@ -255,16 +233,9 @@ server <- function(input, output, session){
           ylim=range(price,dcf.price,na.rm=T))
    
     plota.lines(na.omit(dcf.price), type='s', col='red', lwd=2)
-    
-    
+   
     plota.legend('Close,Intrinsic Value', 'blue,red', list(price, dcf.price))   
     
-    
-    # plota(g, type='b', col='blue', pch=0, main='Growth Rate')
-    # 
-    # 
-    # plota(cash, type='b', col='blue', pch=0, main='Free Cash Flows')
-    #
     # COmpute this is a logic checker for whether you've pressed action button yet 
    
     #######################################################################################################################################  
