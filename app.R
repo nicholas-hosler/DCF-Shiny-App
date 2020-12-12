@@ -17,7 +17,7 @@
 #
 ########################################################################################################################################
 
-#simople app to show intrinsic value based on percepetion 
+#simple app to show intrinsic value of equity securities
 
 library(shiny)
 library(lubridate)
@@ -214,7 +214,7 @@ server <- function(input, output, session){
     #******************************************************************   
     
     # Input checking
-    # this is where I would want to tweek the inputs to generate a decf from any set of assumptions 
+    # this is where I would want to tweek the inputs to generate a dcf from any set of assumptions 
     dcf.price = NA * g
     i.start = which(!is.na(g))[1] 
     
